@@ -1,28 +1,26 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/HuDt6KLx)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19021724&assignment_repo_type=AssignmentRepo)
-# Algorithms and Programming II - Semester Capstone Project
+# Algorithms and Programming II - Semester Capstone Project: Topological Sort Visualization
 
 ## Overview
 
-Welcome to the Algorithms and Programming II course project at Fırat University, Technology Faculty, Software Engineering Department. This project involves developing interactive web applications to implement, visualize, and analyze algorithms using Python and Streamlit.
+Welcome to the Algorithms and Programming II course project at Fırat University, Technology Faculty, Software Engineering Department. This project involves developing an interactive web application to implement, visualize, and analyze the **Topological Sort Algorithm** using Python and Streamlit.
 
 ## Learning Objectives
 
-This project is designed to help you:
+This project is designed to help me:
 
-- Implement complex algorithms in Python
-- Create interactive visualizations that demonstrate algorithm behavior
-- Analyze and understand the time and space complexity of algorithms
-- Practice modern software development workflows using Git and GitHub
-- Gain experience with web application development and deployment
-- Improve technical documentation skills
+* Implement the Topological Sort algorithm in Python
+* Create interactive visualizations that demonstrate algorithm behavior
+* Analyze and understand the time and space complexity of the algorithm
+* Practice modern software development workflows using Git and GitHub
+* Gain experience with web application development and deployment
+* Improve technical documentation skills
 
 ## Technology Stack
 
-- **Programming Language:** Python 3.8+
-- **Web Framework:** Streamlit
-- **Version Control:** Git and GitHub
-- **Deployment:** Streamlit Cloud
+* **Programming Language:** Python 3.8+
+* **Web Framework:** Streamlit
+* **Version Control:** Git and GitHub
+* **Deployment:** Streamlit Cloud
 
 ## Getting Started
 
@@ -30,75 +28,76 @@ This project is designed to help you:
 
 Before you begin, ensure you have the following installed:
 
-- Python 3.8 or higher
-- Git
-- A GitHub account
-- A text editor or IDE (e.g., VS Code, PyCharm)
+* Python 3.8 or higher
+* Git
+* A GitHub account
+* A text editor or IDE (e.g., VS Code, PyCharm)
 
 ### Setting Up Your Development Environment
 
-1. **Accept the GitHub Classroom Assignment**
-   - Click on the assignment link shared by your instructor
-   - This will create a personal copy of the project template in your GitHub account
+1.  **Accept the GitHub Classroom Assignment:**
+    * Click on the assignment link provided by the instructor.
+    * This will create a personal copy of the project template in your GitHub account.
 
-2. **Clone Your Repository**
-   ```bash
-   git clone https://github.com/firat-university-algorithms/your-project-repo.git
-   cd your-project-repo
-   ```
+2.  **Clone Your Repository:**
 
-3. **Create a Virtual Environment**
-   ```bash
-   # On Windows
-   python -m venv venv
-   venv\Scripts\activate
+    ```bash
+    git clone [YOUR_GITHUB_REPO_URL] # Kendi GitHub repo URL'ni buraya yapıştır
+    cd your-project-repo
+    ```
 
-   # On macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+3.  **Create a Virtual Environment:**
 
-## Project Requirements
+    ```bash
+    # On Windows
+    python -m venv venv
+    venv\Scripts\activate
 
-### Core Components
+    # On macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-Each project must include:
+4.  **Install Dependencies:**
 
-1. **Algorithm Implementation**
-   - Correctly implement your assigned algorithm
-   - Handle edge cases and error conditions
-   - Optimize for performance where possible
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-2. **Interactive Interface**
-   - Create user controls to manipulate inputs and parameters
-   - Allow users to adjust algorithm settings and see results in real-time
-   - Provide clear instructions for users
+## Project Requirements (Topological Sort Specific)
 
-3. **Visualization**
-   - Create visual representations of how your algorithm works
-   - Illustrate the algorithm's step-by-step execution
-   - Use appropriate charts, graphs, or custom visualizations
+### Algorithm Implementation
 
-4. **Step-by-Step Explanation**
-   - Include an option to walk through the algorithm's execution
-   - Explain each major step in the algorithm
-   - Highlight key decisions and operations
+* Correctly implement the Topological Sort algorithm (e.g., Kahn's Algorithm or DFS-based).
+* Handle various graph structures including disconnected components and graphs with cycles (and detect/handle cycles appropriately).
 
-5. **Complexity Analysis**
-   - Document the time complexity (Big O notation)
-   - Document the space complexity
-   - Explain how the complexity changes with different inputs
+### Interactive Interface
 
-6. **Test Cases**
-   - Include various examples demonstrating algorithm behavior
-   - Provide best-case, average-case, and worst-case scenarios
-   - Allow users to input custom test cases
+* Allow users to define custom directed acyclic graphs (DAGs) (e.g., node count, edge definitions).
+* Provide controls to trigger the sorting process and step through the algorithm.
 
-### Repository Structure
+### Visualization
 
-Your repository should contain:
+* Clearly visualize the graph structure (nodes, directed edges).
+* Highlight nodes and edges as the topological sort algorithm progresses.
+* Show the sorted order being built up.
 
-```
+### Step-by-Step Explanation
+
+* Provide a textual explanation for each major step of the algorithm's execution during visualization.
+* Explain which node is being processed, why, and how the sorted list is updated.
+
+### Complexity Analysis
+
+* Document the time and space complexity of Topological Sort using Big O notation for different implementations (e.g., adjacency list vs. adjacency matrix).
+* Explain how the complexity relates to the number of vertices (V) and edges (E).
+
+### Test Cases
+
+* Include examples of various DAGs (simple, complex, empty, single-node).
+* Demonstrate cycle detection and how the algorithm handles graphs with cycles (it cannot perform topological sort on cyclic graphs).
+
+## Repository Structure
 project-repository/
 ├── app.py                     # Main Streamlit application
 ├── algorithm.py               # Implementation of your algorithm
@@ -108,101 +107,45 @@ project-repository/
 ├── requirements.txt           # Python package dependencies
 ├── test_algorithm.py          # Unit tests
 ├── examples/                  # Example inputs and outputs
-│   ├── example1.json
-│   └── example2.json
-├── data/                      # Sample data files (if applicable)
-│   ├── sample1.csv
-│   └── sample2.csv
+│   └── (e.g., example_graph.json)
+├── data/                      # Sample data files (if applicable, e.g., default graphs)
+│   └── (e.g., default_graph.json)
 └── docs/                      # Additional documentation
-    ├── algorithm_description.md
-    └── screenshots/
-        ├── screenshot1.png
-        └── screenshot2.png
-```
+├── algorithm_description.md
+└── screenshots/
+├── screenshot1.png
+└── screenshot2.png
 
 ## Documentation Requirements
 
-Your README.md should include:
+Your `README.md` will be continuously updated to include:
 
-- Project title and description
-- Algorithm explanation with mathematical notation when appropriate
-- Installation and usage instructions
-- Screenshots of the application
-- Complexity analysis with explanations
-- Examples of inputs and outputs
-- Known limitations and future improvements
-- References and resources used
+* Project title and description
+* Algorithm explanation with mathematical notation when appropriate
+* Installation and usage instructions
+* Screenshots of the application (once developed)
+* Complexity analysis with explanations
+* Examples of inputs and outputs
+* Known limitations and future improvements
+* References and resources used
+* Streamlit web-app address (URL to your deployed application - to be added later)
 
 ## Deployment Instructions
 
-### Deploying to Streamlit Cloud
-
-1. Create a free account on [Streamlit Cloud](https://streamlit.io/cloud)
-2. Connect your GitHub repository
-3. Configure your app settings
-4. Deploy your application
-5. Add the deployment URL to your README.md
+(To be filled in later once the application is ready for deployment)
 
 ## Evaluation Criteria
 
-Your project will be evaluated based on:
-
-- Correctness of algorithm implementation (40%)
-- Quality of visualization and user interface (20%)
-- Documentation quality (15%)
-- Code organization and clarity (15%)
-- Creativity and additional features (10%)
+(As per the project document)
 
 ## Submission Guidelines
 
-1. Ensure your code is well-commented and follows Python best practices
-2. Verify all required components are included
-3. Test your application thoroughly
-4. Update your README.md with all required information
-5. Commit and push your final changes to GitHub
-6. Deploy your application to Streamlit Cloud
-7. Submit the final version by the deadline: **June 23, 2025, 23:59**
+(As per the project document)
 
 ## Resources
 
-### Streamlit Resources
-- [Streamlit Documentation](https://docs.streamlit.io)
-- [Streamlit Components](https://streamlit.io/components)
-- [Streamlit Deployment](https://docs.streamlit.io/cloud)
-
-### Algorithm Resources
-- Introduction to Algorithms (CLRS) - 4th Edition
-- Algorithm Design Manual - Steven Skiena
-- [VisuAlgo](https://visualgo.net)
-- [Algorithm Visualizations](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)
-
-### GitHub Resources
-- [Git & GitHub for Beginners](https://docs.github.com/en/get-started)
-- [GitHub Classroom Guide](https://github.com/education/classroom)
-
-## Frequently Asked Questions
-
-**Q: Can I change my assigned algorithm?**  
-A: Only in exceptional cases. Please contact your instructor with a valid reason if you need to request a change.
-
-**Q: Can I use additional libraries beyond the core requirements?**  
-A: Yes, but ensure they are properly documented in your requirements.txt file.
-
-**Q: How detailed should the visualization be?**  
-A: It should clearly illustrate each major step of the algorithm's execution. The visualization should help someone understand how the algorithm works.
-
-**Q: Can I work in groups?**  
-A: No, this is an individual project. Each student has a unique algorithm assignment.
-
-**Q: What if I encounter technical difficulties with Streamlit deployment?**  
-A: Document the issue in your README and we can explore alternative deployment options if necessary.
+(As per the project document)
 
 ## Contact Information
 
-For questions or assistance, please contact:
-
-- **Instructor:** Assoc. Prof. Ferhat UÇAR
-- **Office Hours:** 
-  - Fridays: 10:30 - 12:00
-
-- **Office Location:** Technology Faculty - A Section, 3rd floor.
+(As per the project document)
