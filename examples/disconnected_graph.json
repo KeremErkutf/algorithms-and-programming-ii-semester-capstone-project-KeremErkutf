@@ -1,0 +1,11 @@
+{
+    "graph_name": "Disconnected Graph Example",
+    "description": "A graph with multiple disconnected components.",
+    "nodes": ["X", "Y", "P", "Q", "R", "S", "M"],
+    "edges": [
+      ["X", "Y"],
+      ["P", "Q"],
+      ["R", "S"]
+    ]
+  }
+  

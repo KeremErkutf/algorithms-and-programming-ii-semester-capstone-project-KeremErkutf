@@ -1,117 +1,86 @@
-# visualizer.py
-
 import networkx as nx
 import matplotlib.pyplot as plt
-import streamlit as st
+import numpy as np
 
-def draw_graph(graph_obj, current_step_data=None, pos=None):
+def draw_graph(graph, step_data, initial_pos):
     """
-    Draws the graph with nodes and edges, highlighting elements based on the current algorithm step.
-
+    Draws the graph using NetworkX and Matplotlib, highlighting elements based on step_data.
     Args:
-        graph_obj (Graph): The Graph object containing nodes and edges.
-        current_step_data (dict, optional): Data for the current step from the algorithm's 'steps' list.
-                                            Used for highlighting. Defaults to None.
-        pos (dict, optional): A dictionary of node positions (e.g., {node: [x,y]}).
-                              If None, a spring layout is generated. Useful for consistent layouts.
+        graph (Graph): The Graph object containing nodes and edges.
+        step_data (dict): Dictionary containing current step's information (e.g., 'current_node', 'highlighted_nodes', 'message').
+        initial_pos (dict): Pre-calculated initial positions for nodes to maintain consistency.
+    Returns:
+        tuple: A tuple containing the matplotlib figure and the node positions.
     """
     G = nx.DiGraph()
-    
-    # Add nodes to NetworkX graph
-    all_vertices = graph_obj.get_vertices()
-    if not all_vertices: # Handle empty graph
-        st.write("No nodes in the graph to visualize.")
-        return None, None
 
-    G.add_nodes_from(all_vertices)
+    # Add all nodes first, so disconnected nodes also appear
+    G.add_nodes_from(graph.get_vertices())
 
-    # Add edges to NetworkX graph
-    for u, neighbors in graph_obj.get_adj_list().items():
+    for u, neighbors in graph.get_adj_list().items():
         for v in neighbors:
             G.add_edge(u, v)
 
-    # Define node colors and labels
-    node_colors = []
-    node_labels = {}
-    
-    # Default node styling
-    default_node_color = 'skyblue'
-    current_node_color = 'red' # Highlight for currently processed node
-    queue_node_color = 'lightgreen' # Highlight for nodes in queue (Kahn's)
-    visited_visiting_color = 'orange' # For DFS: visiting state
-    visited_finished_color = 'grey' # For DFS: visited/finished state
-    
-    # Default edge styling
-    default_edge_color = 'gray'
-    highlight_edge_color = 'red' # Highlight for active edge being explored
-    edge_colors = [default_edge_color] * len(G.edges())
-    
-    # indegree labels for Kahn's
-    indegree_labels = {} 
-    if current_step_data and "indegree" in current_step_data:
-        indegree_data = current_step_data["indegree"]
-        for v in all_vertices:
-            indegree_labels[v] = f"{v} (in:{indegree_data.get(v, 0)})"
+    # Use initial_pos if available, otherwise calculate a new layout
+    if initial_pos:
+        pos = initial_pos
     else:
-        for v in all_vertices:
-            indegree_labels[v] = str(v)
+        # Optimized spring_layout parameters to reduce node overlap
+        # Increased iterations to allow the layout algorithm more time to settle.
+        # Adjusted 'k' (optimal distance) to potentially spread nodes out better.
+        pos = nx.spring_layout(G, k=0.6, iterations=100) 
+    
+    # --- Figure size adjustment ---
+    # Adjusted figsize to make the plot even shorter vertically.
+    # (width, height) in inches. Trying (6, 3.5) for a more compact vertical space.
+    fig, ax = plt.subplots(figsize=(6, 3.5)) # Dikey eksende daha kısa bir boyut (6x3.5 inç)
 
+    # Node coloring based on step_data
+    node_colors = []
+    # Default color for all nodes
+    default_node_color = '#ADD8E6' # Light Blue
 
-    # Apply styling based on current_step_data
-    if current_step_data:
-        current_node = current_step_data.get("current_node")
-        queue_nodes = current_step_data.get("queue", []) # For Kahn's
-        visited_status = current_step_data.get("visited_status", {}) # For DFS
-        recursion_stack = current_step_data.get("recursion_stack", {}) # For DFS
-        
-        for node in all_vertices:
-            if node == current_node:
-                node_colors.append(current_node_color)
-            elif node in queue_nodes: # Kahn's specific
-                node_colors.append(queue_node_color)
-            elif visited_status.get(node) == 1: # DFS: visiting
-                node_colors.append(visited_visiting_color)
-            elif visited_status.get(node) == 2: # DFS: visited/finished
-                node_colors.append(visited_finished_color)
-            elif recursion_stack.get(node): # DFS: in recursion stack (potential cycle)
-                node_colors.append('purple') # Indicate it's in recursion stack
+    # Highlighted nodes (e.g., in queue, visiting, visited)
+    highlighted_nodes = step_data.get('highlighted_nodes', [])
+    # Current node being processed
+    current_node = step_data.get('current_node', None)
+    # DFS visited statuses
+    visited_status = step_data.get('visited_status', {}) # 0: Unvisited, 1: Visiting, 2: Visited
+
+    for node in G.nodes():
+        if node == current_node:
+            node_colors.append('#FF6347') # Tomato Red for current node
+        elif node in highlighted_nodes:
+            node_colors.append('#FFA07A') # Light Salmon for highlighted (e.g., in queue)
+        elif node in visited_status:
+            status = visited_status.get(node, 0)
+            if status == 1: # Visiting (DFS specific)
+                node_colors.append('#FFD700') # Gold
+            elif status == 2: # Visited (DFS specific)
+                node_colors.append('#90EE90') # Light Green
             else:
                 node_colors.append(default_node_color)
-        
-        # Highlight current edge being processed (e.g., for DFS exploration)
-        if "source_node" in current_step_data and "target_node" in current_step_data:
-            highlighted_edge = (current_step_data["source_node"], current_step_data["target_node"])
-            for i, edge in enumerate(G.edges()):
-                if edge == highlighted_edge:
-                    edge_colors[i] = highlight_edge_color
+        else:
+            node_colors.append(default_node_color)
 
-    else: # No step data, all default color
-        node_colors = [default_node_color] * len(all_vertices)
-
-    # Generate node positions if not provided for consistency
-    if pos is None:
-        pos = nx.spring_layout(G, k=0.8, iterations=50) # k and iterations can be tuned for better layouts
-    
-    fig, ax = plt.subplots(figsize=(10, 7)) # Create a matplotlib figure and axes
-    
     # Draw nodes
-    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=2000, ax=ax)
-    
+    # Reduced node_size further for a more compact visualization.
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=1000, ax=ax) # node_size 1000 olarak değiştirildi
+
     # Draw edges
-    nx.draw_networkx_edges(G, pos, edge_color=edge_colors, arrowsize=20, ax=ax)
-    
-    # Draw labels (use indegree labels if available, else node name)
-    nx.draw_networkx_labels(G, pos, labels=indegree_labels if indegree_labels else {node: node for node in G.nodes()}, font_size=10, font_weight='bold', ax=ax)
-    
-    # If a cycle is detected, highlight it
-    if current_step_data and current_step_data.get("type") == "cycle_detection" or current_step_data.get("cycle_detected"):
-        ax.set_title("CYCLE DETECTED!", color='red', fontsize=16)
-        st.error("Cycle detected! Topological sort not possible for this graph.")
-    elif current_step_data and current_step_data.get("type") == "final_result" and not current_step_data.get("cycle_detected"):
-        ax.set_title("Topological Sort Completed", color='green', fontsize=16)
-    else:
-        ax.set_title("Topological Sort Visualization", fontsize=16)
-    
+    # Standard edges
+    nx.draw_networkx_edges(G, pos, ax=ax, edgelist=G.edges(), arrowstyle='->', arrowsize=20, edge_color='gray', width=1.5)
+
+    # Highlight current edge if available
+    current_edge = step_data.get('current_edge', None)
+    if current_edge:
+        nx.draw_networkx_edges(G, pos, ax=ax, edgelist=[current_edge], arrowstyle='->', arrowsize=25, edge_color='red', width=2.5)
+
+    # Draw labels
+    # Reduced font_size for labels to fit within smaller nodes.
+    nx.draw_networkx_labels(G, pos, font_size=7, font_weight='bold', ax=ax) # font_size 7 olarak değiştirildi
+
+    ax.set_title("Graph Visualization", size=15)
     ax.set_axis_off() # Hide axes
     
-    return fig, pos # Return the figure and positions for consistent layout
+    return fig, pos

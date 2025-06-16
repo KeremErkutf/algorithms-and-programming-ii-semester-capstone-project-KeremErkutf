@@ -1,0 +1,13 @@
+{
+    "graph_name": "Simple Directed Acyclic Graph",
+    "description": "A basic DAG demonstrating a clear topological sort order.",
+    "nodes": ["A", "B", "C", "D", "E"],
+    "edges": [
+      ["A", "B"],
+      ["A", "C"],
+      ["B", "D"],
+      ["C", "D"],
+      ["D", "E"]
+    ]
+  }
+  
