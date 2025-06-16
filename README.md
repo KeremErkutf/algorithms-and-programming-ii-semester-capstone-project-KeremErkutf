@@ -1,169 +1,206 @@
-# Algorithms and Programming II: Semester Capstone Project - Topological Sort Visualization
-
-## Introduction
-
-Welcome to the semester capstone project for Algorithm and Programming II at Fırat University's Technology Faculty, Software Engineering Department. This project is an interactive web application that implements, visualizes, and analyzes the **Topological Sort Algorithm** using Python and Streamlit.
-
-This application is designed to enhance understanding of topological sorting through practical implementation, clear visualization, and detailed analysis, while also building valuable skills in software development, web application deployment, and technical documentation.
-
----
+# Topological Sort - Interactive Visualization
 
 ## Project Overview
-
-### Objectives
-- Implement the Topological Sort algorithm (Kahn's and DFS-based) using Python.
-- Create interactive visualizations that demonstrate how the algorithm operates step-by-step.
-- Analyze and document the time and space complexity of the algorithm using Big O notation.
-- Provide clear documentation explaining the algorithm's working principles.
-- Deploy a functioning Streamlit application for public access.
-
-### Technology Stack
-- **Programming Language:** Python 3.8+
-- **Web Framework:** Streamlit
-- **Visualization Libraries:** NetworkX, Matplotlib
-- **Version Control:** Git and GitHub
-- **Deployment:** Streamlit Cloud
+This project is an interactive web application that implements and visualizes Topological Sort, developed as part of the Algorithms and Programming II course at Fırat University, Software Engineering Department. It aims to provide a clear, step-by-step understanding of this fundamental graph algorithm.
 
 ---
 
-## Project Requirements (Topological Sort Specific)
+## Algorithm Description
 
-### Algorithm Implementation
-- Correct and efficient implementation of both **Kahn's Algorithm (BFS-based)** and **DFS-based Topological Sort**.
-- Ability to handle various graph structures, including disconnected components.
-- **Cycle detection:** The application can identify and report cycles in the graph, indicating that a topological sort is not possible.
+### Problem Definition
+Topological Sort orders vertices of a Directed Acyclic Graph (DAG) such that for every edge U→V, U appears before V. If a cycle exists, sorting is impossible and detected.
 
-### Interactive Interface
-- Users can define custom directed acyclic graphs (DAGs) by entering edges.
-- Provides **pre-defined example graphs** to quickly demonstrate different scenarios (simple, complex, cyclic, disconnected).
-- User controls (slider) to step through the algorithm's execution and observe its state changes.
+### Mathematical Background
+It operates on directed graphs (V vertices, E edges) using concepts like in-degree (incoming edges) for Kahn's algorithm, and visited states (unvisited, visiting, visited) and recursion stack for DFS-based algorithm, crucial for traversal and cycle detection.
 
-### Visualization
-- Clear visualization of the graph structure (nodes, directed edges) using `networkx` and `matplotlib`.
-- **Dynamic highlighting** of nodes and edges as the topological sort algorithm progresses (e.g., current node, nodes in queue/recursion stack, visited nodes).
-- Visual indication of the sorted order being built up.
+### Algorithm Steps
+#### Kahn's Algorithm (BFS-based)
+1. Calculate In-degrees for all vertices.
+2. Initialize a queue with vertices having an in-degree of 0.
+3. Process vertices: Dequeue u, add to sorted list, decrement in-degree of u's neighbors. Enqueue neighbors whose in-degree becomes 0.
+4. Cycle Detection: If not all vertices are processed, a cycle exists.
 
-### Step-by-Step Explanation
-- A textual walkthrough feature displays detailed explanations for each major stage of the algorithm's execution, including current node processing, queue/stack status, and indegree updates.
+#### DFS-based Algorithm
+1. Initialize vertex states: Unvisited (0), Visiting (1), Visited (2).
+2. Iterate: For each unvisited vertex, start a recursive DFS.
+3. DFS Recursive Step: Mark u visiting, add to recursion stack. For neighbor v: if unvisited, recurse; if visiting, cycle detected. After all neighbors, mark u visited, prepend u to sorted list.
+4. Final Order: The reversed order of visited nodes forms the topological sort.
+
+### Pseudocode
+```python
+# Kahn's Algorithm
+function topological_sort_kahn(graph):
+    in_degree = calculate_indegrees(graph)
+    queue = Queue()
+    sorted_list = List()
+    # ...
+    if num_processed_nodes != graph.num_vertices:
+        return "Cycle detected, no topological sort possible."
+    else:
+        return sorted_list
+
+# DFS-based Algorithm
+function topological_sort_dfs(graph):
+    visited_status = Map<Vertex, Int>
+    recursion_stack = Map<Vertex, Bool>
+    sorted_list = List()
+    has_cycle = False
+    # ...
+    if has_cycle:
+        return "Cycle detected, no topological sort possible."
+    else:
+        return sorted_list
+```
 
 ### Complexity Analysis
-- Documentation of both time and space complexity using Big O notation for both Kahn's and DFS-based algorithms.
-- Explanations of how these measures relate to the number of vertices ($V$) and edges ($E$).
-
-### Test Cases
-- Includes a dedicated unit test file (`test_algorithm.py`) with a variety of examples demonstrating the algorithm's behavior under different conditions, including simple DAGs, complex DAGs, cyclic graphs, empty graphs, and single-node/disconnected graphs.
-
----
-
-## Repository Structure
-project-repository/
-├── app.py                  # Main Streamlit application
-├── algorithm.py            # Implementation of Graph class and topological sort algorithms
-├── utils.py                # Helper functions (currently empty, for future use)
-├── visualizer.py           # Visualization components (graph drawing)
-├── README.md               # Project documentation (this file)
-├── requirements.txt        # List of required Python packages
-├── test_algorithm.py       # Unit tests for the algorithm implementations
-└── data/                   # (Optional) Folder for sample data files if applicable
-└── (e.g., default_graph.json)
-└── docs/                   # (Optional) Additional documentation or screenshots
-└── screenshots/
-├── screenshot1.png # Placeholder for application screenshots
-└── screenshot2.png
+- **Time Complexity**:
+  - Kahn's Algorithm: O(V+E)
+  - DFS-based Algorithm: O(V+E)
+- **Space Complexity**:
+  - Kahn's Algorithm: O(V+E)
+  - DFS-based Algorithm: O(V+E)
 
 ---
 
-## Installation and Usage
-
-To set up and run this project locally, follow these steps:
-
-1.  **Clone Your Repository:**
-    ```bash
-    git clone [YOUR_GITHUB_REPO_URL] 
-    cd your-project-repository # Replace with your actual repository folder name
-    ```
-
-2.  **Create a Virtual Environment:**
-    ```bash
-    python -m venv venv
-    ```
-
-3.  **Activate the Virtual Environment:**
-    * **On Windows:**
-        ```bash
-        .\venv\Scripts\activate
-        ```
-    * **On macOS/Linux:**
-        ```bash
-        source venv/bin/activate
-        ```
-
-4.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    (Note: The `requirements.txt` file is generated after the initial setup. Ensure it contains `streamlit`, `networkx`, and `matplotlib`.)
-
-5.  **Run the Streamlit Application:**
-    ```bash
-    streamlit run app.py
-    ```
-    This will open the application in your default web browser (usually at `http://localhost:8501`).
-
-6.  **Run Unit Tests (Optional):**
-    To ensure the algorithms are working correctly, you can run the unit tests:
-    ```bash
-    python -m unittest test_algorithm.py
-    ```
-
----
-
-## Deployment
-
-**Streamlit web-app address (URL to your deployed application):**
-[TO BE ADDED AFTER DEPLOYMENT]
-
-**Instructions:**
-1.  Create a free account on [Streamlit Cloud](https://streamlit.io/cloud).
-2.  Connect your GitHub repository to Streamlit Cloud.
-3.  Select the `main` (or `master`) branch and `app.py` as your main file.
-4.  Deploy your application.
-5.  Once deployed, copy the URL and paste it here.
+## Features
+- Algorithm Selection (Kahn's / DFS-based)
+- Interactive Graph Input (Manual, Examples, JSON Upload)
+- Dynamic Step-by-Step Visualization
+- Manual Step Navigation (Previous/Next, Slider)
+- Auto-Play Animation with adjustable delay
+- Detailed Step Descriptions
+- Automatic Cycle Detection
+- Responsive User Interface
 
 ---
 
 ## Screenshots
-
-*(Placeholder for screenshots of the application. Add compelling images here once your app is fully functional and deployed.)*
+- ![Initial view of the application](screenshots/image.png)
+- ![Algorithm visualization step](screenshots/image2.png)
+- ![Cycle detection warning](screenshots/image3.png)
 
 ---
 
-## Complexity Analysis
+## Installation
 
-### Kahn's Algorithm (BFS-based)
--   **Time Complexity:** $O(V + E)$
-    -   Where $V$ is the number of vertices and $E$ is the number of edges.
-    -   Each vertex is added to the queue and processed at most once. Each edge is visited exactly once when updating indegrees.
--   **Space Complexity:** $O(V + E)$
-    -   This accounts for storing the adjacency list, the indegree array, and the queue.
+### Prerequisites
+- Python 3.8 or higher
+- Git
 
-### DFS-based Algorithm
--   **Time Complexity:** $O(V + E)$
-    -   Where $V$ is the number of vertices and $E$ is the number of edges.
-    -   Each vertex and each edge are visited exactly once during the Depth-First Search.
--   **Space Complexity:** $O(V + E)$
-    -   This accounts for storing the adjacency list, the visited array, and the recursion stack (which can go up to $O(V)$ in the worst case for a deeply nested path).
+### Setup Instructions
+```bash
+git clone [https://github.com/FiratUniversity-IJDP-SoftEng/algorithms-and-programming-ii-semester-capstone-project-KeremErkutf.git]
+cd algorithms-and-programming-ii-semester-capstone-project-KeremErkutf
+
+# On Windows
+python -m venv venv
+.\venv\Scripts\activate
+
+# On macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+---
+
+## Usage Guide
+1. **Define Graph**: Choose an example, upload a JSON (with `{"nodes": [], "edges": []}` format), or type edges manually.
+2. **Select Algorithm**: Kahn's or DFS-based.
+3. **Run Algorithm**: Click "Run Topological Sort".
+4. **Navigate/Animate**: Use sidebar controls to explore steps.
+5. **Observe Results**: View graph, steps, and output.
+
+### Example Inputs
+- Simple DAG: `A,B\nA,C\nB,D\nC,D`
+- Graph with Cycle: `A,B\nB,C\nC,A`
+- Disconnected Graph: `X,Y\nP,Q\nR,S`
+- Isolated Nodes: `A\nB\nC`
+- Complex DAG: via `complex_dag_2.json`
+
+---
+
+## Implementation Details
+
+### Key Components
+- `app.py`: Main Streamlit app.
+- `algorithm.py`: Graph class and algorithms.
+- `utils.py`: Layout and utility functions.
+- `visualizer.py`: Graph drawing and highlighting.
+
+### Code Highlights
+```python
+# algorithm.py
+class Graph:
+    def add_edge(self, u, v):
+        """Adds a directed edge and updates graph properties."""
+        # ...
+
+# visualizer.py
+def draw_graph(graph_obj, current_step_data=None, pos=None):
+    fig, ax = plt.subplots(figsize=(6, 3.5))
+    nx.draw_networkx_nodes(G, pos, node_size=1000)
+    # ...
+```
+
+---
+
+## Testing
+Run unit tests:
+```bash
+python -m unittest test_algorithm.py
+```
+
+### Test Cases
+- Simple/Complex DAGs
+- Cyclic graphs
+- Empty graphs
+- Single node/disconnected graphs
+
+---
+
+## Live Demo
+A live demo of this application is available at: [YOUR_STREAMLIT_APP_URL_HERE]
+
+---
+
+## Limitations and Future Improvements
+
+### Current Limitations
+- No visual graph editing (drag-and-drop)
+- Performance issues on large graphs
+- Limited feedback for malformed input
+
+### Planned Improvements
+- Interactive graph editor
+- Export graph/steps
+- Alternative layouts
+- Performance metrics
+- Better input validation
 
 ---
 
 ## References and Resources
-
--   Streamlit Documentation: [https://docs.streamlit.io](https://docs.streamlit.io)
--   NetworkX Documentation: [https://networkx.org/documentation/stable/](https://networkx.org/documentation/stable/)
--   Matplotlib Documentation: [https://matplotlib.org/stable/contents.html](https://matplotlib.org/stable/contents.html)
--   Introduction to Algorithms (CLRS) - 4th Edition
--   Algorithm Design Manual - Steven Skiena
--   VisuAlgo: [https://visualgo.net](https://visualgo.net) (for algorithm visualization concepts)
+- Cormen et al. (2022). Introduction to Algorithms (4th ed.). MIT Press.
+- Skiena, S. S. (2008). The Algorithm Design Manual (2nd ed.). Springer.
+- [Streamlit Docs](https://docs.streamlit.io)
+- [NetworkX Docs](https://networkx.org/documentation/stable/)
+- [Matplotlib Docs](https://matplotlib.org/stable/contents.html)
+- [VisuAlgo](https://visualgo.net)
+- [GeeksforGeeks - Topological Sort](https://www.geeksforgeeks.org/topological-sorting/)
 
 ---
 
+## Author
+- Name: Kerem Erkut Çiftlikçi
+- Student ID: 240543013
+- GitHub: KeremErkutf
+
+---
+
+## Acknowledgements
+I would like to extend my sincere gratitude to Assoc. Prof. Ferhat UÇAR for providing invaluable guidance and challenging assignments throughout this project.
+
+This project was developed as part of the Algorithms and Programming II course at Fırat University, Technology Faculty, Software Engineering Department, Spring 2025 Semester.

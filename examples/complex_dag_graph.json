@@ -1,0 +1,22 @@
+{
+    "graph_name": "Another Complex DAG Example",
+    "description": "A more extensive directed acyclic graph with multiple paths.",
+    "nodes": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+    "edges": [
+      ["A", "B"],
+      ["A", "C"],
+      ["B", "D"],
+      ["C", "D"],
+      ["D", "E"],
+      ["D", "F"],
+      ["E", "G"],
+      ["F", "G"],
+      ["G", "H"],
+      ["H", "I"],
+      ["H", "J"],
+      ["I", "K"],
+      ["J", "K"],
+      ["K", "L"]
+    ]
+  }
+  

@@ -28,7 +28,7 @@ def draw_graph(graph, step_data, initial_pos):
         # Optimized spring_layout parameters to reduce node overlap
         # Increased iterations to allow the layout algorithm more time to settle.
         # Adjusted 'k' (optimal distance) to potentially spread nodes out better.
-        pos = nx.spring_layout(G, k=0.6, iterations=100) 
+        pos = nx.spring_layout(G, k=5, iterations=500) 
     
     # --- Figure size adjustment ---
     # Adjusted figsize to make the plot even shorter vertically.
@@ -65,20 +65,20 @@ def draw_graph(graph, step_data, initial_pos):
 
     # Draw nodes
     # Reduced node_size further for a more compact visualization.
-    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=1000, ax=ax) # node_size 1000 olarak değiştirildi
+    nx.draw_networkx_nodes(G, pos, node_color=node_colors, node_size=500, ax=ax) # node_size 1000 olarak değiştirildi
 
     # Draw edges
     # Standard edges
-    nx.draw_networkx_edges(G, pos, ax=ax, edgelist=G.edges(), arrowstyle='->', arrowsize=20, edge_color='gray', width=1.5)
+    nx.draw_networkx_edges(G, pos, ax=ax, edgelist=G.edges(), arrowstyle='->', arrowsize=10, edge_color='gray', width=1)
 
     # Highlight current edge if available
     current_edge = step_data.get('current_edge', None)
     if current_edge:
-        nx.draw_networkx_edges(G, pos, ax=ax, edgelist=[current_edge], arrowstyle='->', arrowsize=25, edge_color='red', width=2.5)
+        nx.draw_networkx_edges(G, pos, ax=ax, edgelist=[current_edge], arrowstyle='->', arrowsize=20, edge_color='red', width=2)
 
     # Draw labels
     # Reduced font_size for labels to fit within smaller nodes.
-    nx.draw_networkx_labels(G, pos, font_size=7, font_weight='bold', ax=ax) # font_size 7 olarak değiştirildi
+    nx.draw_networkx_labels(G, pos, font_size=5, font_weight='bold', ax=ax) # font_size 7 olarak değiştirildi
 
     ax.set_title("Graph Visualization", size=15)
     ax.set_axis_off() # Hide axes
