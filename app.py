@@ -1,15 +1,15 @@
 # app.py
 
 import streamlit as st
-import networkx as nx
-import matplotlib as plt
 from algorithm import Graph, topological_sort_kahn, topological_sort_dfs
 from visualizer import draw_graph
-import json # For loading/saving graph examples
+import networkx as nx 
+import matplotlib.pyplot as plt 
 
 def parse_graph_input(input_string):
     """
     Parses a string of edges (e.g., "A,B\nC,D") into a Graph object.
+    Cleans node names by stripping whitespace.
     """
     g = Graph()
     if not input_string.strip():
@@ -19,8 +19,18 @@ def parse_graph_input(input_string):
     for edge_str in edges:
         if ',' in edge_str:
             u, v = edge_str.split(',')
-            g.add_edge(u.strip(), v.strip())
+            g.add_edge(u.strip(), v.strip()) # Strip whitespace from node names
     return g
+
+# --- Example Graphs (New addition) ---
+EXAMPLE_GRAPHS = {
+    "Simple DAG": "A,B\nA,C\nB,D\nC,D",
+    "Complex DAG": "A,B\nA,C\nB,D\nC,E\nD,F\nE,F\nG,H\nG,I\nH,J\nI,J",
+    "Graph with Cycle": "A,B\nB,C\nC,A", # This should detect a cycle
+    "Disconnected Graph": "X,Y\nP,Q\nR,S",
+    "Single Node Graph": "A", # No edges, just a node
+    "Empty Graph": ""
+}
 
 def main():
     """
@@ -34,7 +44,7 @@ def main():
     st.sidebar.header("About")
     st.sidebar.info(
         "This project implements and visualizes the Topological Sort algorithm. "
-        "It's part of the Algorithms and Programming II course at Fırat University."
+        "It's part of the Algorithms and Programming II course at Fırat University, Software Engineering Department."
     )
     st.sidebar.markdown("---")
     st.sidebar.markdown("**Assoc. Prof. Ferhat UÇAR**")
@@ -42,12 +52,15 @@ def main():
 
     # --- Graph Input Section ---
     st.header("Define Your Graph")
-    st.markdown("Enter directed edges as `Source,Target` (e.g., `A,B`). Use a new line for each edge.")
+    st.markdown("You can either load an example graph or define your own.")
 
-    default_graph_input = "A,B\nA,C\nB,D\nC,D\nE,F"
+    # Load example graph
+    example_choice = st.selectbox("Load Example Graph:", list(EXAMPLE_GRAPHS.keys()))
     
-    graph_input = st.text_area("Graph Edges:", value=default_graph_input, height=150, 
-                               help="Each line represents a directed edge (e.g., A,B means A -> B)")
+    # Custom graph input
+    graph_input = st.text_area("Or enter your own graph edges (e.g., `A,B\nC,D`):", 
+                               value=EXAMPLE_GRAPHS[example_choice], height=150, 
+                               help="Each line represents a directed edge (e.g., A,B means A -> B). Isolated nodes can be added like 'A' (if no edges leave/enter them).")
 
     # --- Algorithm Selection ---
     st.header("Select Algorithm and Visualize")
@@ -57,15 +70,27 @@ def main():
     if st.button("Run Topological Sort"):
         st.session_state.graph = parse_graph_input(graph_input)
         
-        if not st.session_state.graph.get_vertices():
-            st.warning("Please enter some edges to define your graph.")
+        if not st.session_state.graph.get_vertices() and graph_input.strip() != "":
+            # This handles cases like "A" where it's a single node but not an edge
+            # We need to ensure single nodes are added to vertices if not part of an edge
+            # For simplicity, if no edges, the parse_graph_input creates an empty graph.
+            # We can refine this later if pure single nodes are a must.
+            st.warning("Please enter valid edges to define your graph or select a proper example.")
             del st.session_state.graph # Clear graph from session state
             if 'sorted_steps' in st.session_state:
                 del st.session_state.sorted_steps
             if 'initial_pos' in st.session_state:
                 del st.session_state.initial_pos
             return
-            
+        elif not st.session_state.graph.get_vertices() and graph_input.strip() == "":
+            st.warning("Graph is empty. Please enter some edges or select an example.")
+            if 'sorted_steps' in st.session_state:
+                del st.session_state.sorted_steps
+            if 'initial_pos' in st.session_state:
+                del st.session_state.initial_pos
+            return
+
+
         if algo_choice == "Kahn's Algorithm (BFS-based)":
             sorted_order, cycle_detected, steps = topological_sort_kahn(st.session_state.graph)
         else: # DFS-based Algorithm
@@ -77,20 +102,20 @@ def main():
         st.session_state.algo_choice = algo_choice
         
         # Generate initial fixed positions for consistency during steps
-        # This prevents the layout from changing with each step
         dummy_graph = nx.DiGraph()
+        # Ensure all vertices from the actual graph are included for layout
         dummy_graph.add_nodes_from(st.session_state.graph.get_vertices())
         for u, neighbors in st.session_state.graph.get_adj_list().items():
             for v in neighbors:
                 dummy_graph.add_edge(u, v)
-        st.session_state.initial_pos = nx.spring_layout(dummy_graph, k=0.8, iterations=50) # Use a fixed layout
+        st.session_state.initial_pos = nx.spring_layout(dummy_graph, k=0.8, iterations=50) 
 
     if 'sorted_steps' in st.session_state:
         st.subheader("Algorithm Visualization")
         
         # Display sorted order if not cycled
         if st.session_state.cycle_detected:
-            st.error("Cycle detected! Topological sort is not possible for this graph.")
+            st.error("Cycle detected in the graph! Topological sort is not possible.")
             st.write("Vertices processed before cycle detection (if any): ", st.session_state.final_sorted_order)
         else:
             st.success(f"Final Topological Sort Order: {st.session_state.final_sorted_order}")
@@ -118,14 +143,13 @@ def main():
             # Draw the graph for the current step
             fig, pos = draw_graph(st.session_state.graph, current_step_data, st.session_state.initial_pos)
             if fig:
-                st.pyplot(fig) # Display the matplotlib figure
-                #plt.close(fig) # Close the figure to prevent memory leaks
-
+                st.pyplot(fig) 
+                # plt.close(fig) # Removed this line in previous fix
         else:
             st.info("No steps to visualize for this graph (e.g., empty graph).")
     
     st.markdown("---")
-    st.subheader("Complexity Analysis (To be documented in README.md)")
+    st.subheader("Complexity Analysis (Also in README.md)")
     st.write(
         """
         - **Time Complexity (Kahn's Algorithm):** $O(V + E)$ where V is the number of vertices and E is the number of edges.

@@ -1,151 +1,58 @@
-# Algorithms and Programming II - Semester Capstone Project: Topological Sort Visualization
+# Algorithms and Programming II: Semester Capstone Project - Topological Sort Visualization
 
-## Overview
+## Introduction
 
-Welcome to the Algorithms and Programming II course project at Fırat University, Technology Faculty, Software Engineering Department. This project involves developing an interactive web application to implement, visualize, and analyze the **Topological Sort Algorithm** using Python and Streamlit.
+Welcome to the semester capstone project for Algorithm and Programming II at Fırat University's Technology Faculty, Software Engineering Department. This project is an interactive web application that implements, visualizes, and analyzes the **Topological Sort Algorithm** using Python and Streamlit.
 
-## Learning Objectives
+This application is designed to enhance understanding of topological sorting through practical implementation, clear visualization, and detailed analysis, while also building valuable skills in software development, web application deployment, and technical documentation.
 
-This project is designed to help me:
+---
 
-* Implement the Topological Sort algorithm in Python
-* Create interactive visualizations that demonstrate algorithm behavior
-* Analyze and understand the time and space complexity of the algorithm
-* Practice modern software development workflows using Git and GitHub
-* Gain experience with web application development and deployment
-* Improve technical documentation skills
+## Project Overview
 
-## Technology Stack
+### Objectives
+- Implement the Topological Sort algorithm (Kahn's and DFS-based) using Python.
+- Create interactive visualizations that demonstrate how the algorithm operates step-by-step.
+- Analyze and document the time and space complexity of the algorithm using Big O notation.
+- Provide clear documentation explaining the algorithm's working principles.
+- Deploy a functioning Streamlit application for public access.
 
-* **Programming Language:** Python 3.8+
-* **Web Framework:** Streamlit
-* **Version Control:** Git and GitHub
-* **Deployment:** Streamlit Cloud
+### Technology Stack
+- **Programming Language:** Python 3.8+
+- **Web Framework:** Streamlit
+- **Visualization Libraries:** NetworkX, Matplotlib
+- **Version Control:** Git and GitHub
+- **Deployment:** Streamlit Cloud
 
-## Getting Started
-
-### Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-* Python 3.8 or higher
-* Git
-* A GitHub account
-* A text editor or IDE (e.g., VS Code, PyCharm)
-
-### Setting Up Your Development Environment
-
-1.  **Accept the GitHub Classroom Assignment:**
-    * Click on the assignment link provided by the instructor.
-    * This will create a personal copy of the project template in your GitHub account.
-
-2.  **Clone Your Repository:**
-
-    ```bash
-    git clone [YOUR_GITHUB_REPO_URL] # Kendi GitHub repo URL'ni buraya yapıştır
-    cd your-project-repo
-    ```
-
-3.  **Create a Virtual Environment:**
-
-    ```bash
-    # On Windows
-    python -m venv venv
-    venv\Scripts\activate
-
-    # On macOS/Linux
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
-4.  **Install Dependencies:**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
+---
 
 ## Project Requirements (Topological Sort Specific)
 
 ### Algorithm Implementation
-
-* Correctly implement the Topological Sort algorithm (e.g., Kahn's Algorithm or DFS-based).
-* Handle various graph structures including disconnected components and graphs with cycles (and detect/handle cycles appropriately).
+- Correct and efficient implementation of both **Kahn's Algorithm (BFS-based)** and **DFS-based Topological Sort**.
+- Ability to handle various graph structures, including disconnected components.
+- **Cycle detection:** The application can identify and report cycles in the graph, indicating that a topological sort is not possible.
 
 ### Interactive Interface
-
-* Allow users to define custom directed acyclic graphs (DAGs) (e.g., node count, edge definitions).
-* Provide controls to trigger the sorting process and step through the algorithm.
+- Users can define custom directed acyclic graphs (DAGs) by entering edges.
+- Provides **pre-defined example graphs** to quickly demonstrate different scenarios (simple, complex, cyclic, disconnected).
+- User controls (slider) to step through the algorithm's execution and observe its state changes.
 
 ### Visualization
-
-* Clearly visualize the graph structure (nodes, directed edges).
-* Highlight nodes and edges as the topological sort algorithm progresses.
-* Show the sorted order being built up.
+- Clear visualization of the graph structure (nodes, directed edges) using `networkx` and `matplotlib`.
+- **Dynamic highlighting** of nodes and edges as the topological sort algorithm progresses (e.g., current node, nodes in queue/recursion stack, visited nodes).
+- Visual indication of the sorted order being built up.
 
 ### Step-by-Step Explanation
-
-* Provide a textual explanation for each major step of the algorithm's execution during visualization.
-* Explain which node is being processed, why, and how the sorted list is updated.
+- A textual walkthrough feature displays detailed explanations for each major stage of the algorithm's execution, including current node processing, queue/stack status, and indegree updates.
 
 ### Complexity Analysis
-
-* Document the time and space complexity of Topological Sort using Big O notation for different implementations (e.g., adjacency list vs. adjacency matrix).
-* Explain how the complexity relates to the number of vertices (V) and edges (E).
+- Documentation of both time and space complexity using Big O notation for both Kahn's and DFS-based algorithms.
+- Explanations of how these measures relate to the number of vertices ($V$) and edges ($E$).
 
 ### Test Cases
+- Includes a dedicated unit test file (`test_algorithm.py`) with a variety of examples demonstrating the algorithm's behavior under different conditions, including simple DAGs, complex DAGs, cyclic graphs, empty graphs, and single-node/disconnected graphs.
 
-* Include examples of various DAGs (simple, complex, empty, single-node).
-* Demonstrate cycle detection and how the algorithm handles graphs with cycles (it cannot perform topological sort on cyclic graphs).
+---
 
 ## Repository Structure
-project-repository/
-├── app.py                     # Main Streamlit application
-├── algorithm.py               # Implementation of your algorithm
-├── utils.py                   # Helper functions
-├── visualizer.py              # Visualization components
-├── README.md                  # Project documentation
-├── requirements.txt           # Python package dependencies
-├── test_algorithm.py          # Unit tests
-├── examples/                  # Example inputs and outputs
-│   └── (e.g., example_graph.json)
-├── data/                      # Sample data files (if applicable, e.g., default graphs)
-│   └── (e.g., default_graph.json)
-└── docs/                      # Additional documentation
-├── algorithm_description.md
-└── screenshots/
-├── screenshot1.png
-└── screenshot2.png
-
-## Documentation Requirements
-
-Your `README.md` will be continuously updated to include:
-
-* Project title and description
-* Algorithm explanation with mathematical notation when appropriate
-* Installation and usage instructions
-* Screenshots of the application (once developed)
-* Complexity analysis with explanations
-* Examples of inputs and outputs
-* Known limitations and future improvements
-* References and resources used
-* Streamlit web-app address (URL to your deployed application - to be added later)
-
-## Deployment Instructions
-
-(To be filled in later once the application is ready for deployment)
-
-## Evaluation Criteria
-
-(As per the project document)
-
-## Submission Guidelines
-
-(As per the project document)
-
-## Resources
-
-(As per the project document)
-
-## Contact Information
-
-(As per the project document)
