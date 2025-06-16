@@ -2,6 +2,7 @@
 
 import streamlit as st
 import networkx as nx
+import matplotlib as plt
 from algorithm import Graph, topological_sort_kahn, topological_sort_dfs
 from visualizer import draw_graph
 import json # For loading/saving graph examples
@@ -118,7 +119,7 @@ def main():
             fig, pos = draw_graph(st.session_state.graph, current_step_data, st.session_state.initial_pos)
             if fig:
                 st.pyplot(fig) # Display the matplotlib figure
-                plt.close(fig) # Close the figure to prevent memory leaks
+                #plt.close(fig) # Close the figure to prevent memory leaks
 
         else:
             st.info("No steps to visualize for this graph (e.g., empty graph).")
