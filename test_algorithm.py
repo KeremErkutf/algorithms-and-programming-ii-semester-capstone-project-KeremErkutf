@@ -2,6 +2,7 @@
 
 import unittest
 from algorithm import Graph, topological_sort_kahn, topological_sort_dfs
+from collections import defaultdict
 
 class TestTopologicalSort(unittest.TestCase):
 
