@@ -162,7 +162,7 @@ python -m unittest test_algorithm.py
 ---
 
 ## Live Demo
-A live demo of this application is available at: [YOUR_STREAMLIT_APP_URL_HERE]
+A live demo of this application is available at: https://topolosorto.streamlit.app/
 
 ---
 
